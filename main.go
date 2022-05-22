@@ -1,31 +1,37 @@
 package main
 
 import (
-    "fmt"
     "os"
-    "time"
+    "strconv"
     
-    "github.com/rodiongork/udptest/receive"
-    "github.com/rodiongork/udptest/collect"
+    "github.com/rodiongork/udptest/pkg/collect"
+    "github.com/rodiongork/udptest/pkg/process"
+    "github.com/rodiongork/udptest/pkg/receive"
+    "github.com/rodiongork/udptest/pkg/web"
 )
 
 func main() {
     eventChannel := make(chan string, 5)
-    
-    collector, err := collect.StartEventCollector(eventChannel)
-    if err != nil {
-        println("Failed to start event collector", err.Error())
-        os.Exit(1)
-    }
-    
-    if err := receive.StartEventServer(1961, eventChannel); err != nil {
+    eventCollector := collect.New()
+
+    process.StartEventProcessor(eventChannel, eventCollector)
+
+    portToListen := intFromEnv("port", 1961)
+
+    if err := receive.StartEventServer(portToListen, eventChannel); err != nil {
         println("Failed to start event server", err.Error())
-        os.Exit(1)
+        os.Exit(2)
     }
-    
-    for {
-        fmt.Println("Events:", collector.CachedCount())
-        time.Sleep(5 * time.Second)
-    }
+
+    portForUi := intFromEnv("uiport", 4004)
+
+    weberr := web.RunWebServer(portForUi, eventCollector)
+    println("Web-server ends with", weberr.Error())
 }
 
+func intFromEnv(key string, defaultValue int) int {
+    if v, err := strconv.Atoi(os.Getenv(key)); err == nil {
+        return v
+    }
+    return defaultValue
+}

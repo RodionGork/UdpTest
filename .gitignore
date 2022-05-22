@@ -1,1 +1,3 @@
-./udptest
+udptest
+vendor
+events.db

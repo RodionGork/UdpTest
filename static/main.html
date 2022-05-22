@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>Monitoring System</title>
+
+  <link href="./bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    tbody tr {
+      cursor: pointer;
+    }
+    tbody tr:hover {
+      background: #ff8 !important;
+    }
+    .crit {
+        color: red;
+        font-weight: bold;
+    }
+    .eror {
+        color: orange;
+        font-weight: bold;
+    }
+  </style>
+
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">Home</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+          aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center">
+         <h1>Events Monitoring</h1>
+      </div>
+    </div>
+    <br/>
+    <br/>
+    <div class="row">
+      <div class="col-md-12 text-center">Total received: <span id="total">0</span></span></div>
+      <br/><br/>
+      <div class="col-md-8 offset-md-2 text-center">
+        <div class="row">
+            <div class="col-md-4 offset-md-1"><input id="type" class="form-control" type="text" placeholder="type"/></div>
+            <div class="col-md-4 offset-md-1"><input id="level" class="form-control" type="text" placeholder="severity"/></div>
+        </div>
+        <br/>
+      </div>
+      <div class="col-md-12">
+        <table class="table table-striped">
+          <thead>
+            <th>Type</th>
+            <th>Severity</th>
+            <th>EventID</th>
+            <th>Time</th>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="./jquery.min.js"></script>
+  <script src="./bootstrap.bundle.min.js"></script>
+  <script src="./common.js"></script>
+</body>
+</html>
+
