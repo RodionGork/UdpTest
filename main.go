@@ -3,6 +3,7 @@ package main
 import (
     "os"
     "strconv"
+    "strings"
     
     "github.com/rodiongork/udptest/pkg/collect"
     "github.com/rodiongork/udptest/pkg/process"
@@ -16,14 +17,16 @@ func main() {
 
     process.StartEventProcessor(eventChannel, eventCollector)
 
-    portToListen := intFromEnv("port", 1961)
+    portsToListen := intListFromEnv("UDP_PORTS", []int{1961})
 
-    if err := receive.StartEventServer(portToListen, eventChannel); err != nil {
-        println("Failed to start event server", err.Error())
-        os.Exit(2)
+    for _, port := range portsToListen {
+        if err := receive.StartEventServer(port, eventChannel); err != nil {
+            println("Failed to start event server on port", port, err.Error())
+            os.Exit(2)
+        }
     }
 
-    portForUi := intFromEnv("uiport", 4004)
+    portForUi := intFromEnv("UI_PORT", 4004)
 
     weberr := web.RunWebServer(portForUi, eventCollector)
     println("Web-server ends with", weberr.Error())
@@ -34,4 +37,18 @@ func intFromEnv(key string, defaultValue int) int {
         return v
     }
     return defaultValue
+}
+
+func intListFromEnv(key string, defaultValue []int) []int {
+    values := os.Getenv(key)
+    if values == "" {
+        return defaultValue
+    }
+    result := make([]int, 0)
+    for _, value := range strings.Split(values, ",") {
+        if port, err := strconv.Atoi(value); err == nil {
+            result = append(result, port)
+        }
+    }
+    return result
 }

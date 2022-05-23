@@ -1,0 +1,1 @@
+docker run -it --rm -p1961-1969:1961-1969/udp -p4004:4004 udp-test
